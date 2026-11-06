@@ -15,8 +15,29 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return auth()->check()
         ? redirect()->route(auth()->user()->dashboardRoute())
-        : redirect()->route('login');
+        : response()->file(base_path('landing/index.html'));
 })->name('home');
+
+Route::get('/landing/{path}', function (string $path) {
+    $path = str_replace(['..', '\\'], '', $path);
+    $file = base_path('landing/'.$path);
+
+    abort_unless(is_file($file), 404);
+
+    $mime = match (strtolower(pathinfo($file, PATHINFO_EXTENSION))) {
+        'css' => 'text/css; charset=UTF-8',
+        'js' => 'application/javascript; charset=UTF-8',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'svg' => 'image/svg+xml',
+        'webp' => 'image/webp',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2',
+        default => 'application/octet-stream',
+    };
+
+    return response()->file($file, ['Content-Type' => $mime]);
+})->where('path', '.*')->name('landing.asset');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
