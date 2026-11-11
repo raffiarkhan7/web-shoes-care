@@ -31,13 +31,13 @@
                     </div>
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total</p>
-                        <p class="mt-1.5 text-2xl font-bold text-teal-700">{{ $order->formattedTotal() }}</p>
+                        <p class="mt-1.5 text-2xl font-bold text-blue-700">{{ $order->formattedTotal() }}</p>
                         <p class="mt-1 text-xs font-medium {{ $order->payment_status === 'paid' ? 'text-emerald-600' : 'text-amber-600' }}">{{ $order->paymentStatusLabel() }} · {{ $order->paymentMethodLabel() }}</p>
                     </div>
                     <div class="sm:col-span-2">
                         <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Pembeli</p>
                         <div class="mt-2 flex items-center gap-3 rounded-xl bg-slate-50 p-3.5">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-xs font-bold text-teal-700">{{ $order->user?->initials() }}</span>
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">{{ $order->user?->initials() }}</span>
                             <div>
                                 <p class="text-sm font-semibold text-slate-800">{{ $order->user?->name }}</p>
                                 <p class="text-xs text-slate-500">{{ $order->user?->phone }} · {{ $order->user?->email }}</p>
@@ -84,7 +84,7 @@
 
                     <div>
                         <label for="status" class="mb-1.5 block text-sm font-semibold text-slate-700">Status pesanan</label>
-                        <select id="status" name="status" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+                        <select id="status" name="status" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10">
                             @foreach (\App\Models\Order::STATUSES as $value => $label)
                                 <option value="{{ $value }}" @selected($order->status === $value)>{{ $label }}</option>
                             @endforeach
@@ -93,14 +93,14 @@
 
                     <div>
                         <label for="payment_status" class="mb-1.5 block text-sm font-semibold text-slate-700">Status pembayaran</label>
-                        <select id="payment_status" name="payment_status" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+                        <select id="payment_status" name="payment_status" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10">
                             @foreach (\App\Models\Order::PAYMENT_STATUSES as $value => $label)
                                 <option value="{{ $value }}" @selected($order->payment_status === $value)>{{ $label }}</option>
                             @endforeach
                         </select>
                     </div>
 
-                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800">
+                    <button type="submit" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800">
                         <x-icon name="check" class="h-4 w-4" /> Simpan perubahan
                     </button>
                 </form>
@@ -113,7 +113,7 @@
                     @php($currentIndex = array_search($order->status, $steps, true))
                     @foreach ($steps as $index => $step)
                         <li class="flex items-center gap-3">
-                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold {{ $order->status === 'cancelled' ? 'bg-slate-100 text-slate-400' : ($currentIndex !== false && $index <= $currentIndex ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-400') }}">
+                            <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold {{ $order->status === 'cancelled' ? 'bg-slate-100 text-slate-400' : ($currentIndex !== false && $index <= $currentIndex ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400') }}">
                                 @if ($currentIndex !== false && $index < $currentIndex)
                                     <x-icon name="check" class="h-3.5 w-3.5" />
                                 @else

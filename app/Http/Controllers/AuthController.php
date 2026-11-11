@@ -32,7 +32,17 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        $user = Auth::user();
+        $user = $request->user();
+
+        if (! $user instanceof User) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            throw ValidationException::withMessages([
+                'email' => 'Email atau password yang Anda masukkan salah.',
+            ]);
+        }
 
         if (! $user->is_active) {
             Auth::logout();
@@ -41,6 +51,16 @@ class AuthController extends Controller
 
             throw ValidationException::withMessages([
                 'email' => 'Akun Anda sedang dinonaktifkan. Hubungi admin Shaos Care.',
+            ]);
+        }
+
+        if (! in_array($user->role, [User::ROLE_PEMBELI, User::ROLE_PENJUAL], true)) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            throw ValidationException::withMessages([
+                'email' => 'Gunakan halaman login sesuai role akun Anda.',
             ]);
         }
 
@@ -71,7 +91,7 @@ class AuthController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'role' => $data['role'],
-            'shop_name' => $data['role'] === User::ROLE_PENJUAL ? $data['shop_name'] : null,
+            'shop_name' => $data['shop_name'] ?? null,
             'address' => $data['address'],
             'password' => $data['password'],
             'is_active' => true,
@@ -89,11 +109,12 @@ class AuthController extends Controller
 
     public function logout(Request $request): RedirectResponse
     {
+        $redirectRoute = $request->user()?->isAdmin() ? 'admin.login' : 'login';
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Anda berhasil keluar.');
+        return redirect()->route($redirectRoute)->with('success', 'Anda berhasil keluar.');
     }
 }

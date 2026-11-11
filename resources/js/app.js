@@ -12,20 +12,6 @@ document.getElementById('sidebar-toggle')?.addEventListener('click', openSidebar
 document.getElementById('sidebar-close')?.addEventListener('click', closeSidebar);
 document.getElementById('sidebar-backdrop')?.addEventListener('click', closeSidebar);
 
-document.querySelectorAll('.demo-account').forEach((button) => {
-    button.addEventListener('click', () => {
-        const email = document.getElementById('email');
-        const password = document.getElementById('password');
-
-        if (email && password) {
-            email.value = button.dataset.demoEmail ?? '';
-            password.value = button.dataset.demoPassword ?? '';
-            email.dispatchEvent(new Event('input', { bubbles: true }));
-            password.dispatchEvent(new Event('input', { bubbles: true }));
-        }
-    });
-});
-
 const roleInputs = document.querySelectorAll('input[name="role"]');
 const shopField = document.getElementById('shop-name-field');
 

@@ -13,8 +13,8 @@ class DashboardController extends Controller
     public function index(): View
     {
         $stats = [
-            'pembeli' => User::where('role', User::ROLE_PEMBELI)->count(),
-            'penjual' => User::where('role', User::ROLE_PENJUAL)->count(),
+            'admins' => User::where('role', User::ROLE_ADMIN)->count(),
+            'visitors' => User::where('role', User::ROLE_PENGUNJUNG)->count(),
             'orders' => Order::count(),
             'pending' => Order::where('status', Order::STATUS_PENDING)->count(),
             'revenue' => Order::where('payment_status', 'paid')->sum('total_price'),

@@ -14,7 +14,7 @@ class EnsureUserHasRole
         $user = $request->user();
 
         if (! $user) {
-            return redirect()->route('login');
+            return redirect()->guest(route('login'));
         }
 
         if (! $user->is_active) {
@@ -28,7 +28,7 @@ class EnsureUserHasRole
         }
 
         if (! in_array($user->role, $roles, true)) {
-            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+            abort(403);
         }
 
         return $next($request);

@@ -1,22 +1,57 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LandingTreatmentController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\WebsiteContentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Pembeli\DashboardController as PembeliDashboardController;
 use App\Http\Controllers\Pembeli\OrderController as PembeliOrderController;
 use App\Http\Controllers\Penjual\DashboardController as PenjualDashboardController;
 use App\Http\Controllers\Penjual\OrderController as PenjualOrderController;
 use App\Http\Controllers\Penjual\ServiceController as PenjualServiceController;
+use App\Models\LandingTreatment;
+use App\Models\WebsiteContent;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return auth()->check()
-        ? redirect()->route(auth()->user()->dashboardRoute())
-        : response()->file(base_path('landing/index.html'));
+    try {
+        $websiteContent = WebsiteContent::first();
+    } catch (QueryException $exception) {
+        $databaseErrorCode = (int) ($exception->errorInfo[1] ?? 0);
+        if (! in_array($databaseErrorCode, [1045, 1049, 1146, 1698, 2002, 2003], true)) {
+            throw $exception;
+        }
+
+        $websiteContent = null;
+    }
+    $previewDraft = request()->boolean('preview') && request()->user()?->isAdmin();
+    $whatsappAdminNumber = preg_replace('/\D+/', '', (string) config('services.whatsapp.admin_number'));
+    $content = $previewDraft
+        ? ($websiteContent?->draft ?? config('landing.content'))
+        : ($websiteContent?->published ?? config('landing.content'));
+    $treatments = $content['treatments'] ?? ($websiteContent?->catalog_initialized
+        ? LandingTreatment::orderBy('sort_order')->orderBy('id')->get()->toArray()
+        : config('landing.treatments'));
+    $treatments = array_values(array_filter($treatments, fn (array $treatment): bool => (bool) ($treatment['is_active'] ?? true)));
+    $whatsappAdminNumber = preg_replace('/\D+/', '', (string) ($content['whatsapp_number'] ?? $whatsappAdminNumber));
+
+    return view('landing', [
+        'content' => $content,
+        'isPreview' => $previewDraft,
+        'treatments' => $treatments,
+        'pickupInfo' => config('landing.pickup'),
+        'whatsappAdminNumber' => $whatsappAdminNumber,
+    ]);
 })->name('home');
+
+Route::get('/admin/login', [AdminLoginController::class, 'show'])->name('admin.login');
+Route::post('/admin/login', [AdminLoginController::class, 'login'])->middleware('throttle:5,1')->name('admin.login.store');
+Route::get('/admin', fn () => redirect()->route('admin.dashboard'))->name('admin.home');
 
 Route::get('/landing/{path}', function (string $path) {
     $path = str_replace(['..', '\\'], '', $path);
@@ -41,9 +76,9 @@ Route::get('/landing/{path}', function (string $path) {
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.store');
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1')->name('register.store');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
@@ -54,7 +89,16 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
-        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('website', [WebsiteContentController::class, 'edit'])->name('website.edit');
+        Route::put('website', [WebsiteContentController::class, 'update'])->name('website.update');
+        Route::post('website/discard', [WebsiteContentController::class, 'discard'])->name('website.discard');
+        Route::get('website/treatments', [LandingTreatmentController::class, 'index'])->name('website.treatments.index');
+        Route::get('website/treatments/create', [LandingTreatmentController::class, 'create'])->name('website.treatments.create');
+        Route::post('website/treatments', [LandingTreatmentController::class, 'store'])->name('website.treatments.store');
+        Route::get('website/treatments/{treatment}/edit', [LandingTreatmentController::class, 'edit'])->name('website.treatments.edit');
+        Route::put('website/treatments/{treatment}', [LandingTreatmentController::class, 'update'])->name('website.treatments.update');
+        Route::delete('website/treatments/{treatment}', [LandingTreatmentController::class, 'destroy'])->name('website.treatments.destroy');
 
         Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
         Route::put('users/{user}', [AdminUserController::class, 'update'])->name('users.update');

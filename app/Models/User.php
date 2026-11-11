@@ -23,10 +23,13 @@ class User extends Authenticatable
 
     public const ROLE_PEMBELI = 'pembeli';
 
+    public const ROLE_PENGUNJUNG = 'pengunjung';
+
     public const ROLES = [
         self::ROLE_ADMIN => 'Admin',
         self::ROLE_PENJUAL => 'Penjual',
         self::ROLE_PEMBELI => 'Pembeli',
+        self::ROLE_PENGUNJUNG => 'Pengunjung',
     ];
 
     protected function casts(): array
@@ -78,7 +81,8 @@ class User extends Authenticatable
         return match ($this->role) {
             self::ROLE_ADMIN => 'admin.dashboard',
             self::ROLE_PENJUAL => 'penjual.dashboard',
-            default => 'pembeli.dashboard',
+            self::ROLE_PEMBELI => 'pembeli.dashboard',
+            default => 'home',
         };
     }
 

@@ -22,7 +22,7 @@
                     </div>
                     <div class="text-right">
                         <x-status-badge :order="$order" />
-                        <p class="mt-2 text-2xl font-bold text-teal-700">{{ $order->formattedTotal() }}</p>
+                        <p class="mt-2 text-2xl font-bold text-blue-700">{{ $order->formattedTotal() }}</p>
                         <p class="text-xs font-medium {{ $order->payment_status === 'paid' ? 'text-emerald-600' : 'text-amber-600' }}">{{ $order->paymentStatusLabel() }}</p>
                     </div>
                 </div>
@@ -41,15 +41,15 @@
                             @foreach ($steps as $index => $step)
                                 @php($isDone = $currentIndex !== false && $index < $currentIndex)
                                 @php($isCurrent = $currentIndex !== false && $index === $currentIndex)
-                                <li class="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 {{ $isCurrent ? 'border-teal-300 bg-teal-50' : ($isDone ? 'border-emerald-100 bg-emerald-50/50' : 'border-slate-100 bg-slate-50/50') }}">
-                                    <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold {{ $isCurrent ? 'bg-teal-700 text-white' : ($isDone ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500') }}">
+                                <li class="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 {{ $isCurrent ? 'border-blue-300 bg-blue-50' : ($isDone ? 'border-emerald-100 bg-emerald-50/50' : 'border-slate-100 bg-slate-50/50') }}">
+                                    <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold {{ $isCurrent ? 'bg-blue-700 text-white' : ($isDone ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500') }}">
                                         @if ($isDone)
                                             <x-icon name="check" class="h-3.5 w-3.5" />
                                         @else
                                             {{ $index + 1 }}
                                         @endif
                                     </span>
-                                    <span class="text-xs font-semibold {{ $isCurrent ? 'text-teal-800' : ($isDone ? 'text-emerald-700' : 'text-slate-500') }}">{{ \App\Models\Order::STATUSES[$step] }}</span>
+                                    <span class="text-xs font-semibold {{ $isCurrent ? 'text-blue-800' : ($isDone ? 'text-emerald-700' : 'text-slate-500') }}">{{ \App\Models\Order::STATUSES[$step] }}</span>
                                 </li>
                             @endforeach
                         </ol>
@@ -60,7 +60,7 @@
             <div class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm sm:p-6">
                 <h3 class="text-base font-bold text-slate-900">Rincian layanan</h3>
                 <div class="mt-4 flex items-start gap-4 rounded-xl bg-slate-50 p-4">
-                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-500 text-white">
+                    <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-emerald-500 text-white">
                         <x-icon name="shoe" class="h-6 w-6" />
                     </span>
                     <div class="min-w-0 flex-1">
@@ -85,7 +85,7 @@
                     </div>
                     <div class="flex items-center justify-between border-t border-slate-100 pt-2 text-slate-900">
                         <span class="font-semibold">Total</span>
-                        <span class="text-lg font-bold text-teal-700">{{ $order->formattedTotal() }}</span>
+                        <span class="text-lg font-bold text-blue-700">{{ $order->formattedTotal() }}</span>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
             <div class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-sm sm:p-6">
                 <h3 class="text-base font-bold text-slate-900">Toko Anda</h3>
                 <div class="mt-4 flex items-center gap-3">
-                    <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-600">
+                    <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                         <x-icon name="store" class="h-5 w-5" />
                     </span>
                     <div class="min-w-0">
@@ -154,12 +154,12 @@
                 </form>
             @endif
 
-            <div class="rounded-2xl bg-gradient-to-br from-teal-900 to-emerald-900 p-5 text-white shadow-sm">
+            <div class="rounded-2xl bg-gradient-to-br from-blue-900 to-emerald-900 p-5 text-white shadow-sm">
                 <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
                     <x-icon name="shield" class="h-5 w-5 text-amber-300" />
                 </span>
                 <h3 class="mt-3 text-sm font-bold">Garansi Shaos Care</h3>
-                <p class="mt-1 text-xs leading-relaxed text-teal-100/75">Jika hasil kurang memuaskan, ajukan cuci ulang gratis dalam 2×24 jam setelah sepatu diterima.</p>
+                <p class="mt-1 text-xs leading-relaxed text-blue-100/75">Jika hasil kurang memuaskan, ajukan cuci ulang gratis dalam 2×24 jam setelah sepatu diterima.</p>
             </div>
         </div>
     </div>

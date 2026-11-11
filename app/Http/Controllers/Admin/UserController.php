@@ -27,7 +27,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->orderByRaw("CASE WHEN role = 'admin' THEN 0 WHEN role = 'penjual' THEN 1 ELSE 2 END")
+        $users = $query->orderByRaw("CASE WHEN role = 'admin' THEN 0 ELSE 1 END")
             ->latest()
             ->paginate(10)
             ->withQueryString();

@@ -2,7 +2,7 @@
 
 @php
     $tones = [
-        'teal' => 'bg-teal-50 text-teal-700 ring-teal-100',
+        'teal' => 'bg-blue-50 text-blue-700 ring-blue-100',
         'amber' => 'bg-amber-50 text-amber-700 ring-amber-100',
         'sky' => 'bg-sky-50 text-sky-700 ring-sky-100',
         'violet' => 'bg-violet-50 text-violet-700 ring-violet-100',

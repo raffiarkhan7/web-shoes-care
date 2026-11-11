@@ -1,6 +1,22 @@
 const header = document.getElementById('site-header');
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
+const whatsappNumber = document.body.dataset.whatsappNumber?.replace(/\D/g, '') ?? '';
+
+document.querySelectorAll('[data-whatsapp-message]').forEach((link) => {
+    if (!whatsappNumber) {
+        link.setAttribute('aria-disabled', 'true');
+        link.setAttribute('title', 'Nomor WhatsApp admin belum dikonfigurasi');
+        link.addEventListener('click', (event) => event.preventDefault());
+
+        return;
+    }
+
+    const message = link.dataset.whatsappMessage ?? '';
+    link.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+});
 
 const onScroll = () => {
     header?.classList.toggle('is-scrolled', window.scrollY > 12);

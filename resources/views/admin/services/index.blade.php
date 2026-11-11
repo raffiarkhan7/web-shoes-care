@@ -5,7 +5,7 @@
 @section('subheading', 'Semua layanan cuci sepatu dari mitra penjual.')
 
 @section('actions')
-    <a href="{{ route('admin.services.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800">
+    <a href="{{ route('admin.services.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800">
         <x-icon name="plus" class="h-4 w-4" /> Tambah layanan
     </a>
 @endsection
@@ -17,15 +17,15 @@
                 <div class="relative flex-1">
                     <x-icon name="search" class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                     <input type="search" name="search" value="{{ request('search') }}" placeholder="Cari nama layanan..."
-                        class="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+                        class="w-full rounded-xl border border-slate-300 bg-white py-2.5 pl-10 pr-4 text-sm shadow-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10">
                 </div>
-                <select name="penjual" class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-teal-500 focus:ring-4 focus:ring-teal-500/10">
+                <select name="penjual" class="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10">
                     <option value="">Semua penjual</option>
                     @foreach ($sellers as $seller)
                         <option value="{{ $seller->id }}" @selected((string) request('penjual') === (string) $seller->id)>{{ $seller->shop_name ?: $seller->name }}</option>
                     @endforeach
                 </select>
-                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800">
+                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800">
                     <x-icon name="filter" class="h-4 w-4" /> Filter
                 </button>
             </form>
@@ -34,7 +34,7 @@
         @if ($services->isEmpty())
             <div class="p-5">
                 <x-empty-state icon="services" title="Belum ada layanan" description="Tambahkan layanan pertama untuk mitra penjual.">
-                    <a href="{{ route('admin.services.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-teal-800">
+                    <a href="{{ route('admin.services.create') }}" class="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-800">
                         <x-icon name="plus" class="h-4 w-4" /> Tambah layanan
                     </a>
                 </x-empty-state>
@@ -76,7 +76,7 @@
                                 </td>
                                 <td class="px-5 py-4">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <a href="{{ route('admin.services.edit', $service) }}" title="Edit" class="rounded-lg border border-slate-200 bg-white p-2 text-slate-500 transition hover:bg-slate-50 hover:text-teal-700">
+                                        <a href="{{ route('admin.services.edit', $service) }}" title="Edit" class="rounded-lg border border-slate-200 bg-white p-2 text-slate-500 transition hover:bg-slate-50 hover:text-blue-700">
                                             <x-icon name="edit" class="h-4 w-4" />
                                         </a>
                                         <form method="POST" action="{{ route('admin.services.toggle', $service) }}">
